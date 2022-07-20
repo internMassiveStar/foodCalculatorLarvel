@@ -1,3 +1,5 @@
+
+@extends('backend.layouts.header.refresh')
 @extends('backend.layouts.master')
 @section('content')
     {{-- today Online Appointment --}}
@@ -55,7 +57,7 @@
                                     <a class="btn btn-info btn-sm"
                                         href="{{ route('order-List', $editData->order_id) }}">View</a>
                                     <a class="btn btn-success btn-sm"
-                                        href="{{ route('kitchen-status', $editData->order_id) }}">Kitchen</a>
+                                        href="{{ route('kitchen-complete', $editData->order_id) }}">Production</a>
 
                                 </td>
 

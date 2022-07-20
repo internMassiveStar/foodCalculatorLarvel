@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\WaiterController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\CompanpyController;
+
 use App\Http\Controllers\FoodCalculatorController;
 
 
@@ -24,7 +26,9 @@ use App\Http\Controllers\FoodCalculatorController;
 //     return $request->user();
 // });
 
-Route::get('/app-food-List', [FoodController::class, 'appFoodList']);
-Route::get('/app-waiter-List', [WaiterController::class, 'appWaiterList']);
-Route::get('/app-table-List', [TableController::class, 'appTableList']);
+Route::get('/app-food-List/{id}', [FoodController::class, 'appFoodList']);
+Route::get('/app-waiter-List/{id}', [WaiterController::class, 'appWaiterList']);
+Route::get('/app-table-List/{id}', [TableController::class, 'appTableList']);
+Route::get('/company-details/{id}', [CompanpyController::class, 'companyDetails']);
+
 Route::post('/order-store',[FoodCalculatorController::class,'appOrderStore']);

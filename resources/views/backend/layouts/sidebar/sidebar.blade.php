@@ -1,18 +1,25 @@
 <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('dashboard') }}">
         <div class="sidebar-brand-icon">
-            <img src="img/logo/logo2.png">
+            <i class="fas fa-person-booth text-danger"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">RuangAdmin</div>
+        <div class="sidebar-brand-text mx-3">Food Calculator</div>
     </a>
-    <hr class="sidebar-divider my-0">
-    <li class="nav-item active">
-        <a class="nav-link" href="index.html">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
+ 
+   
 
     <hr class="sidebar-divider">
+    {{--  Company  --}}
+   @if(Auth::user()->role==0)
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('company-List') }}" data-target="#collapseBootstrap"
+            aria-expanded="true" aria-controls="collapseBootstrap">
+            <i class="far fa-fw fa-window-maximize"></i>
+            <span>Company</span>
+        </a>
+
+    </li>
+@endif
 
     {{--  Waiter  --}}
     <li class="nav-item">
@@ -54,7 +61,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{{ route('food-Production') }}">Food Production Add
                 </a>
-                <a class="collapse-item" href="{{ route('food-Production') }}">Food Production List</a>
+                <a class="collapse-item" href="{{ route('food-Production-List') }}">Food Production List</a>
                
             </div>
         </div>
@@ -78,7 +85,7 @@
         </div>
     </li>
 
-
+   
 
 
 

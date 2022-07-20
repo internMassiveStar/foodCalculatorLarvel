@@ -18,6 +18,7 @@ class CreateFoodCalculatorsTable extends Migration
             $table->string('order_id');
             $table->string('customer_name');
             $table->string('customer_mobile');
+            $table->string('company_id');
             $table->string('waiter');
             $table->string('table');
             $table->string('food_name');

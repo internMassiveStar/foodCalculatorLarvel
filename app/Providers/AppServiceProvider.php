@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,7 +23,15 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
-        //
+    {  
+    //     if(Auth::check()){
+    //     $companyId=Auth::user()->role;
+    //     print_r($companyId);
+    //     echo $companyId;
+
+        
+    //     config(['companyId' => $companyId]);
+    // }
+       
     }
 }

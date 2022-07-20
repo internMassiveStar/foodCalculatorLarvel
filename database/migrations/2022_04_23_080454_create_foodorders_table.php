@@ -18,6 +18,7 @@ class CreateFoodordersTable extends Migration
             $table->string('order_id');
             $table->string('order_name');
             $table->string('order_mobile');
+            $table->string('company_id');
             $table->string('waiter');
             $table->string('table');
             $table->string('order_item');

@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="img/logo/logo.png" rel="icon">
-    <title>RuangAdmin - Dashboard</title>
+    <title>Food Calculator</title>
     <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/ruang-admin.min.css') }}" rel="stylesheet" />
@@ -34,9 +34,37 @@
                 <!-- Topbar -->
 
                 <!-- Container Fluid-->
+                <div class="row mb-3">
+                    @isset($trending)
+                    @foreach ($trending as $trend )
+                        
+                    
+                    <div class="col-xl-3 col-md-6 ">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-uppercase mb-1">Ontrending #{{ $loop->index + 1 }} @if(Auth::user()->role==0)
+                                            at {{ $trend->company_name }} @endif
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $trend->foodName }}</div>
+                                        <div class="h5 mb-0 font-weight-bold text-red-800">{{ $trend->food_price }} BDT</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <img style="width: 50px;height:50px;"
+                                                    src="{{ $trend->food_photo ? url('/' . $trend->food_photo) : url('food_image/no-image.png') }}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                    @endisset
+                   
+                </div>
                 @yield('content')
                 <!---Container Fluid-->
-            </div>
+          
             <!-- Footer -->
             @include('backend.layouts.footer.footer')
             <!-- Footer -->

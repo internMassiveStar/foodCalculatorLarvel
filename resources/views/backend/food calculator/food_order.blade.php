@@ -1,3 +1,4 @@
+@extends('backend.layouts.header.refresh')
 @extends('backend.layouts.master')
 @section('content')
     {{-- today Online Appointment --}}

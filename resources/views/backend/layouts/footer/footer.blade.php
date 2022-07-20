@@ -2,10 +2,8 @@
     <div class="container my-auto">
         <div class="copyright text-center my-auto">
             <span>copyright &copy;
-                <script>
-                    document.write(new Date().getFullYear());
-                </script> - developed by
-                <b><a href="https://indrijunanda.gitlab.io/" target="_blank">Omor Hossain</a></b>
+               
+                <b><a href="https://www.massivestarstudio.com/" target="_blank">Massive Star Studio Ltd.</a></b>
             </span>
         </div>
     </div>

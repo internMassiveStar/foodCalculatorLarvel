@@ -37,6 +37,18 @@
                             <input type="text" class="form-control" value="{{ @$editData->food_price }}"
                                 name="food_price" id="foodprice" />
                         </div>
+                        @if(Auth::user()->role==0)
+                        <div class="form-group col-md-4">
+                            <label for="memberInstraction"><b>Company Name</b></label>
+                            <select class="form-control" name="company_id" id="company_id">
+                                <option value="">--Select--</option>
+                                @foreach ($companies as $company) 
+                                <option value="{{$company->public_key}}" selected>{{$company->company_name}}</option>
+                            @endforeach
+                              
+                            </select>
+                        </div>
+                        @endif
 
                         <div class="form-group col-md-6">
                             <label for="date"><b>Date</b></label>
@@ -44,9 +56,10 @@
                                 value="{{ @$editData->food_date }}" name="food_date" id="date"
                                 {{ @$editData ? 'readonly' : '' }} />
                         </div>
-                        <div class="form-group col-md-6">
-                            <button type="submit" class="btn btn-primary">{{ @$editData ? 'Update' : 'Submit' }}</button>
-                        </div>
+                        
+                    </div>
+                    <div class="form-group col-md-6">
+                        <button type="submit" class="btn btn-primary">{{ @$editData ? 'Update' : 'Submit' }}</button>
                     </div>
                 </form>
             </div>
@@ -76,6 +89,9 @@
 
                                     <th>Serial Number</th>
                                     <th>Food Name</th>
+                                    @if(Auth::user()->role==0)
+                                    <th>Company Name</th>
+                                    @endif
                                     <th>Food Picture</th>
                                     <th>Food Price</th>
                                     <th>Date</th>
@@ -84,10 +100,13 @@
                             </thead>
                             <tbody>
 
-                                @foreach ($food as $fd)
+                                @foreach ($foodCom as $fd)
                                     <tr>
                                         <td>{{ $loop->index + 1 }}</td>
                                         <td>{{ $fd->foodName }}</td>
+                                        @if(Auth::user()->role==0)
+                                        <td>{{ $fd->company_name }}</td>
+                                        @endif
                                         <td>
                                             <a href="{{ @$fd->food_photo ? url('/' . $fd->food_photo) : url('food_image/no-image.png') }}"
                                                 download="" title="Click to download"><img style="width: 50px;height:50px;"

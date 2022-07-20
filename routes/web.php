@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\CompanpyController;
 use App\Http\Controllers\FoodCalculatorController;
 use App\Http\Controllers\FoodProductionController;
 use App\Http\Controllers\TableController;
@@ -9,6 +9,7 @@ use App\Http\Controllers\FoodController;
 
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,18 +25,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+})->name('logout');
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('backend.layouts.master');
-    })->name('dashboard');
-});
-
-// Waiter
+Route::get('/dashboard',[FoodCalculatorController::class,'trendingOrder'])->name('dashboard');
 Route::get('/waiter-List', [WaiterController::class, 'waiterList'])->name('waiter-List');
 Route::post('/waiter-add', [WaiterController::class, 'waiterAdd'])->name('waiter-add');
 Route::get('/waiter-Edit/{id}', [WaiterController::class, 'waiterEdit'])->name('waiter-Edit');
@@ -53,10 +53,15 @@ Route::post('/food-add', [FoodController::class, 'foodAdd'])->name('food-add');
 Route::get('/food-Edit/{id}', [FoodController::class, 'foodEdit'])->name('food-Edit');
 Route::post('/food-Update/{id}', [FoodController::class, 'foodUpdate'])->name('food-Update');
 
-
-
 // Food Production Cost
-Route::get('/food-Production', [FoodProductionController::class, 'foodProduction'])->name('food-Production');
+Route::get('/food-Production', [FoodProductionController::class, 'foodorderList'])->name('food-Production');
+Route::get('/food-Production-List', [FoodProductionController::class, 'foodproductionList'])->name('food-Production-List');
+
+Route::post('/ingredient',[FoodProductionController::class,'ingredient'])->name('ingredient');
+Route::get('/production-status/{id}', [FoodProductionController::class, 'productionStatus'])->name('production-status');
+
+
+
 // Route::post('/food-Productionadd', [FoodController::class, 'foodProductionAdd'])->name('food-Productionadd');
 
 
@@ -76,9 +81,43 @@ Route::get('/order-List/{id}', [FoodCalculatorController::class, 'orderList'])->
 
 // for kitchen
 Route::get('/kitchen-status/{id}', [FoodCalculatorController::class, 'kitchenStatus'])->name('kitchen-status');
-Route::get('/kitchen-List', [FoodCalculatorController::class, 'kitchenList'])->name('kitchen-List');
+Route::get('/kitchen-complete/{id}', [FoodCalculatorController::class, 'kitchenComplete'])->name('kitchen-complete');
 
+Route::get('/kitchen-List', [FoodCalculatorController::class, 'kitchenList'])->name('kitchen-List');
 
 
 // for price
 Route::get('/price-List', [FoodCalculatorController::class, 'priceList'])->name('price-List');
+Route::get('/price-status/{id}', [FoodCalculatorController::class, 'priceStatus'])->name('price-status');
+
+//company setting
+Route::get('/setting-company', [CompanpyController::class, 'setttingConpany'])->name('setting-company');
+Route::post('/setting-company', [CompanpyController::class, 'setsetttingCompany'])->name('set-setting-company');
+//company profile
+Route::get('/company-profile', [CompanpyController::class, 'companyProfile'])->name('company-profile');
+Route::get('/company-profiles/{id}', [CompanpyController::class, 'companyProfileDetails'])->name('company-profiles');
+
+
+
+
+});
+
+//company register
+
+
+
+//company login
+Route::group(['middleware' => ['ControlCompany']], function () {
+    Route::get('/company-List', [CompanpyController::class, 'companyList'])->name('company-List');
+    Route::post('/company-add', [CompanpyController::class, 'companyAdd'])->name('company-add');
+    Route::get('/company-Edit/{id}', [CompanpyController::class, 'companyEdit'])->name('company-Edit');
+    Route::post('/company-Update/{id}', [CompanpyController::class, 'companyUpdate'])->name('company-Update');
+    
+        
+    });
+
+
+
+
+
+// Route::get('/price-List', [FoodCalculatorController::class, 'priceListView'])->name('price-List-view');

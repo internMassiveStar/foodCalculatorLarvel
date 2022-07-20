@@ -9,9 +9,47 @@ use App\Models\Table;
 use App\Models\waiter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class FoodCalculatorController extends Controller
-{
+{ 
+
+    public function trendingOrder(){
+
+        $public=Auth::user()->public_key;
+        $role=Auth::user()->role;
+        if($role==1){
+         $trending = DB::table('food_calculators')
+        ->join('food', 'food_calculators.food_name', 'food.id')
+        ->select('food.foodName', 'food.food_photo','food.food_price', 'food_calculators.food_name')
+        ->where('food_calculators.company_id', $public)
+        ->whereBetween('food_calculators.created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+        ->groupBy('food_calculators.food_name')
+        ->orderByRaw('count(*) DESC')
+        ->limit(3)
+        ->get();
+        }else{
+            $trending = DB::table('food_calculators')
+            ->join('food', 'food_calculators.food_name', 'food.id')
+            ->join('companies', 'food_calculators.company_id', 'companies.company_id')
+            ->select('food.foodName', 'food.food_photo','food.food_price', 'food_calculators.food_name','companies.company_name')
+          
+            ->whereBetween('food_calculators.created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            ->groupBy('food_calculators.food_name')
+            ->orderByRaw('count(*) DESC')
+            ->limit(3)
+            ->get();
+        }
+
+       
+        
+        // dd($trending);
+
+    
+       return view('backend.layouts.master',compact('trending'));
+    }
+   
     public function foodcalulatorList()
     {
         $food = Food::orderBy('foodName', 'ASC')->get();
@@ -93,6 +131,7 @@ class FoodCalculatorController extends Controller
             $fdc->customer_mobile = $request->customer_mobile;
             $fdc->waiter = $request->waiter;
             $fdc->table = $request->table;
+            $fdc->company_id=$request->company_id;
             $fdc->food_name =$detail[$i][0]['food_id'];
             $fdc->food_quantity = $detail[$i][0]['qty'];
             $fdc->sub_total = $detail[$i][0]['sub_total'];
@@ -110,6 +149,7 @@ class FoodCalculatorController extends Controller
         $foc->order_mobile = $request->customer_mobile;
         $foc->waiter = $request->waiter;
         $foc->table = $request->table;
+        $foc->company_id=$request->company_id;
         $foc->order_item = $request->item;
         $foc->total_price = $request->grand_price;
         $foc->vat = $request->vat;
@@ -132,11 +172,23 @@ class FoodCalculatorController extends Controller
 
     public function foodorderList()
     {
-        $food = DB::table('foodorders')
+        $public=Auth::user()->public_key;
+        $role=Auth::user()->role;
+        if($role==1){
+            $food = DB::table('foodorders')
+            ->join('waiters', 'foodorders.waiter', 'waiters.id')
+            ->select('waiters.waiter_name', 'foodorders.*')
+            ->where('foodorders.kitchen_status', '0')
+            ->where('foodorders.company_id',$public)
+            ->orderBy('foodorders.id', 'DESC')->get();
+        }else{
+            $food = DB::table('foodorders')
             ->join('waiters', 'foodorders.waiter', 'waiters.id')
             ->select('waiters.waiter_name', 'foodorders.*')
             ->where('foodorders.kitchen_status', '0')
             ->orderBy('foodorders.id', 'DESC')->get();
+        }
+    
 
 
         return view('backend.food calculator.food_order', compact('food'));
@@ -167,19 +219,57 @@ class FoodCalculatorController extends Controller
         $kitchenstatus->save();
         return redirect()->back()->with('success', 'Food Successfully Deliver To KItchen');
     }
+    public function kitchenComplete($id){
+        $kitchencomplete = foodorder::where('order_id', $id)->first();
+
+        // $kitchenstatus = foodorder::findOrFail($id);
+        $kitchencomplete->kitchen_status = '2';
+
+        $kitchencomplete->save();
+        return redirect()->back()->with('success', 'Food Successfully Deliver To KItchen');
+
+    }
+    public function priceStatus($id)
+    {
+        $pricestatus = foodorder::where('order_id', $id)->first();
+
+        // $kitchenstatus = foodorder::findOrFail($id);
+        $pricestatus->price_status = '1';
+
+        $pricestatus->save();
+        return redirect()->back()->with('success', 'Food Successfully Deliver To KItchen');
+    }
+
 
 
     public function kitchenList()
     {
+        $public=Auth::user()->public_key;
+        $role=Auth::user()->role;
+        if($role==1){
+            $kitchencomplete = foodorder::where('kitchen_status', '1')->where('company_id',$public)->get();
+
+
+        }else{
+            $kitchencomplete = foodorder::where('kitchen_status', '1')->get();
+        }
         $date = date('Y-m-d');
-        $kitchencomplete = foodorder::where('kitchen_status', '1')->whereDate('created_at', $date)->get();
         // dd($kitchencomplete);
         return view('backend.food calculator.kitchen_complete', compact('kitchencomplete'));
     }
 
     public function priceList()
     {
+        $public=Auth::user()->public_key;
+        $role=Auth::user()->role;
+        if($role==1){
+            $pricelists = foodorder::where('kitchen_status', '3')->where('price_status','0')->where('company_id',$public)->get();
 
-        return view('backend.food calculator.foodprice_complete');
+        }else{
+            $pricelists = foodorder::where('kitchen_status', '3')->where('price_status','0')->get();
+
+        }
+
+        return view('backend.food calculator.foodprice_complete',compact('pricelists'));
     }
 }

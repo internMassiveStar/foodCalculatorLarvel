@@ -1,3 +1,4 @@
+@extends('backend.layouts.header.refresh')
 @extends('backend.layouts.master')
 @section('content')
     {{-- today Online Appointment --}}
@@ -33,34 +34,36 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($food as $editData)
+                        @foreach ($pricelists as $data)
                             <tr>
 
                                 <td>{{ $loop->index + 1 }}</td>
-                                <td>{{ $editData->order_id }}</td>
-                                <td>{{ $editData->order_name }}</td>
+                                <td>{{ $data->order_id }}</td>
+                                <td>{{ $data->order_name }}</td>
 
 
-                                <td>{{ $editData->order_mobile }}</td>
-                                <td>{{ $editData->waiter_name }}</td>
+                                <td>{{ $data->order_mobile }}</td>
+                                <td>{{ $data->waiter_name }}</td>
 
-                                <td>{{ $editData->table }}</td>
+                                <td>{{ $data->table }}</td>
 
-                                <td>{{ $editData->order_item }}</td>
-                                <td>{{ $editData->total_price }}</td>
-                                <td>{{ $editData->vat }}</td>
-                                <td>{{ $editData->grand_price }}</td>
+                                <td>{{ $data->order_item }}</td>
+                                <td>{{ $data->total_price }}</td>
+                                <td>{{ $data->vat }}</td>
+                                <td>{{ $data->grand_price }}</td>
 
                                 <td>
                                     <a class="btn btn-info btn-sm"
-                                        href="{{ route('order-List', $editData->order_id) }}">View</a>
-                                    <a class="btn btn-success btn-sm"
-                                        href="{{ route('kitchen-status', $editData->order_id) }}">Kitchen</a>
+                                        href="{{ route('order-List', $data->order_id) }}">View</a>
+                                 
+                                    <a class="btn btn-danger btn-sm"
+                                        href="{{ route('price-status', $data->order_id) }}">Payment Recived</a>
+                                       
 
                                 </td>
 
                             </tr>
-                        @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
             </div>

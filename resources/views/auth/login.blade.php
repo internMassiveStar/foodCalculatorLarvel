@@ -19,6 +19,14 @@
                 <x-jet-label for="email" value="{{ __('Email') }}" />
                 <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
             </div>
+            <div>
+                <x-jet-label for="public_key" value="{{ __('Public Key') }}" />
+                <x-jet-input id="public_key" class="block mt-1 w-full" type="text" name="public_key" :value="old('public_key')" required autofocus />
+            </div>
+            <div>
+                <x-jet-label for="private_key" value="{{ __('Private Key') }}" />
+                <x-jet-input id="private_key" class="block mt-1 w-full" type="password" name="private_key" :value="old('private_key')" required autofocus />
+            </div>
 
             <div class="mt-4">
                 <x-jet-label for="password" value="{{ __('Password') }}" />

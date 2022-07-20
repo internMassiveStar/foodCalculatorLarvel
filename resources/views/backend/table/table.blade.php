@@ -29,9 +29,21 @@
                                 value="{{ @$editData->table_date }}" name="table_date" id="date"
                                 {{ @$editData ? 'readonly' : '' }} />
                         </div>
-                        <div class="form-group col-md-6">
-                            <button type="submit" class="btn btn-primary">{{ @$editData ? 'Update' : 'Submit' }}</button>
+                        @if(Auth::user()->role==0)
+                        <div class="form-group col-md-4">
+                            <label for="memberInstraction"><b>Company Name</b></label>
+                            <select class="form-control" name="company_id" id="company_id">
+                                <option value="">--Select--</option>
+                                @foreach ($companies as $company) 
+                                <option value="{{$company->public_key}}" selected>{{$company->company_name}}</option>
+                            @endforeach
+                              
+                            </select>
                         </div>
+                       @endif
+                    </div>
+                    <div class="form-group col-md-6">
+                        <button type="submit" class="btn btn-primary">{{ @$editData ? 'Update' : 'Submit' }}</button>
                     </div>
                 </form>
             </div>
@@ -61,16 +73,22 @@
 
                                     <th>Serial Number</th>
                                     <th>Table Number</th>
+                                    @if(Auth::user()->role==0)
+                                    <th>Company Name</th>
+                                    @endif
                                     <th>Date</th>
                                     <th width="80px">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
 
-                                @foreach ($table as $wtr)
+                                @foreach ($tableCom as $wtr)
                                     <tr>
                                         <td>{{ $loop->index + 1 }}</td>
                                         <td>{{ $wtr->table_name }}</td>
+                                        @if(Auth::user()->role==0)
+                                        <td>{{ $wtr->company_name }}</td>
+                                        @endif
                                         <td>{{ $wtr->table_date }}</td>
 
                                         <td>
